@@ -1,8 +1,10 @@
 import {Button, TextField , Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios'
 import Logo from '../assets/logo.svg'
+import {ToastContainer, toast} from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 
 function Register() {
@@ -12,9 +14,45 @@ function Register() {
   const [email,setEmail]=useState("")
   const [confirmPassword,setConfirmPassword]=useState("")
 
+  const navigate = useNavigate()
+
+  const toastOptions = {
+      position : "bottom-right",
+      autoClose : 8000,
+      pauseOnHover : true,
+      draggable : true,
+      theme : 'dark'
+  }
+
   async function handleClick (event) 
   {
-    event.preventDefault;
+    event.preventDefault();
+    if(handleValidation())
+    {
+      
+    }
+  }
+
+  function handleValidation () {
+    console.log(password)
+    console.log(confirmPassword)
+    if(password != confirmPassword){
+      toast.error('password and confirm password should be same', toastOptions)
+      return false;
+    }
+    else if (userName.length < 3){
+      toast.error('username should be more than 3 characters', toastOptions)
+      return false;
+    }
+    else if (password.length < 3){
+      toast.error('Password should be equal or greater than 8 characters', toastOptions)
+      return false;
+    }
+    else if (email === ''){
+      toast.error('email is required', toastOptions)
+      return false;
+    }
+    return true;
   }
 
   return (
@@ -32,12 +70,14 @@ function Register() {
           <Input type='email' label="Email" onChange={(e)=>setEmail(e.target.value)}></Input>
           <Input type='password' label="Password" onChange={(e)=>setPassword(e.target.value)}></Input>
           <Input type='password' label="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)}></Input>
-          <div className="flex justify-center mt-14"><Button variant="contained"   onSubmit={handleClick} className="w-36">Sign Up</Button></div>
+          <div className="flex justify-center mt-14"><Button variant="contained"   onClick={(event) => {handleClick(event)}} className="w-36">Sign Up</Button></div>
           <div className="text-center pt-4 text-white">
             Already have an account ? <Link className='text-blue-600' to="/login">Login</Link>
           </div>
         </div>
         </div>
+
+        <ToastContainer />
     </div>
   )
 }
