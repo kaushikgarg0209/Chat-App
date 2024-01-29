@@ -24,6 +24,13 @@ function Register() {
       theme : 'dark'
   }
 
+  useEffect(() => {
+    if (localStorage.getItem('chat-app-user'))
+    {
+      navigate('/')
+    }
+  }, [])
+  
   async function handleClick (event) 
   {
     event.preventDefault();
