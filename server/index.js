@@ -1,12 +1,15 @@
-const experss = require('express')
-const cors = require('cors')
-const mongoose = require('mongoose')
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
+const messageRoutes = require("./routes/messages");
 
-const app = experss()
-require('dotenv').config();
+const app = express();
+const socket = require("socket.io");
+require("dotenv").config();
 
 app.use(cors())
-app.use(experss.json());
+app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URL, {dbName : "chat",})
@@ -16,6 +19,9 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
+
+  app.use("/api/auth", authRoutes);
+  app.use("/api/messages", messageRoutes);
 
 
 const server = app.listen(process.env.PORT, () => {

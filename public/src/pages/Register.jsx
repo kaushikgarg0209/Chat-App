@@ -5,11 +5,11 @@ import axios from 'axios'
 import Logo from '../assets/logo.svg'
 import {ToastContainer, toast} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
+import { registerRoute } from "../utils/APIRoutes";
 
 function Register() {
 
-  const [userName,setUserName]=useState("")
+  const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
   const [confirmPassword,setConfirmPassword]=useState("")
@@ -29,18 +29,27 @@ function Register() {
     event.preventDefault();
     if(handleValidation())
     {
-      
+      const {data}  = await axios.post(registerRoute, {
+        username,
+        email,
+        password,
+      })
+      if (data.status === false){
+        toast.error(data.msg, toastOptions)
+      }
+      if (data.status === true){
+        localStorage.setItem('chat-app-user', JSON.stringify(data.user))
+        navigate('/')
+      }
     }
   }
 
   function handleValidation () {
-    console.log(password)
-    console.log(confirmPassword)
     if(password != confirmPassword){
       toast.error('password and confirm password should be same', toastOptions)
       return false;
     }
-    else if (userName.length < 3){
+    else if (username.length < 3){
       toast.error('username should be more than 3 characters', toastOptions)
       return false;
     }
@@ -66,7 +75,7 @@ function Register() {
         </div>
         
         <div className="m-4 p-5 w-96 bg-[#00000076] rounded-xl">
-          <Input type = 'text'   label="Username" onChange={(e)=>setUserName(e.target.value)}/>
+          <Input type = 'text'   label="Username" onChange={(e)=>setUsername(e.target.value)}/>
           <Input type='email' label="Email" onChange={(e)=>setEmail(e.target.value)}></Input>
           <Input type='password' label="Password" onChange={(e)=>setPassword(e.target.value)}></Input>
           <Input type='password' label="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)}></Input>
