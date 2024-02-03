@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
+import { allUsersRoute } from '../utils/APIRoutes';
 import Contacts from '../components/Contacts';
 import { constants } from 'buffer';
 
 function Chat() {
 
   const [contacts, setContacts] = useState([]);
-  const [currentUser, setCurrentUser] = useState(undefined)
+  const [currentUser, setCurrentUser] = useState(undefined) 
   
   const navigate = useNavigate();
 
@@ -20,18 +21,19 @@ function Chat() {
       }
       else {
         const str = localStorage.getItem('chat-app-user')
-        const jsondata = JSON.parse(str)
-        setCurrentUser(jsondata)
+        const parsedata = await JSON.parse(str)
+        setCurrentUser(parsedata)
       }
     }
     func();
-  }, []);
+  }, [navigate]);
+  
 
   useEffect(() => {
     const func = async() => {
       if(currentUser) {
         if (currentUser.isAvatarImageSet){
-          const data = await axios.get(`${allUserRoute}/${currentUser._id}`)
+          const data = await axios.get(`${allUsersRoute}/${currentUser._id}`)
           setContacts(data.data)
         }
         else {
@@ -46,7 +48,6 @@ function Chat() {
   return (
     <Container>
         <div className='container'>
-          <Contacts contacts={constants} currentUser={currentUser}></Contacts>
         </div>
     </Container>
   )
