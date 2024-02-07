@@ -6,12 +6,13 @@ import styled from 'styled-components'
 import { allUsersRoute } from '../utils/APIRoutes';
 import Contacts from '../components/Contacts';
 import { constants } from 'buffer';
+import Welcome from '../components/Welcome';
 
 function Chat() {
 
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined) 
-  
+  const [currentChat, setCurrentChat] = useState(undefined)
   const navigate = useNavigate();
 
   useEffect( () => {
@@ -45,11 +46,17 @@ function Chat() {
     func();
   }, [currentUser])
 
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat)
+  }
+
   return (
     <Container>
-        <div className='container'>
+        <div className="container">
+          <Contacts contacts={contacts} changeChat={handleChatChange} />
+          <Welcome/>
         </div>
-    </Container>
+      </Container>
   )
 }
 
