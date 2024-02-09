@@ -1,6 +1,6 @@
 const Host = import.meta.env.VITE_HOST
 export const host = Host;
-export const loginRoute = `https://chat-app-api-zjxw.onrender.com/api/auth/login`;
+export const loginRoute = `${host}/api/auth/login`;
 export const registerRoute = `${host}/api/auth/register`;
 export const logoutRoute = `${host}/api/auth/logout`;
 export const allUsersRoute = `${host}/api/auth/allusers`;
